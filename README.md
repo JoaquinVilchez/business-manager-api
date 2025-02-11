@@ -1,99 +1,109 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Business Manager
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Descripción
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+**Business Manager** es una plataforma diseñada para ayudar a los negocios a gestionar sus proveedores, controlar sus ingresos y egresos, y llevar un registro detallado de sus transacciones. Con esta herramienta, los usuarios pueden:
 
-## Description
+- Registrar y gestionar proveedores.
+- Realizar un seguimiento de los gastos e ingresos del negocio.
+- Registrar facturas, remitos y pagos pendientes.
+- Obtener un balance financiero detallado con información sobre las deudas a proveedores, pagos realizados y más.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+El objetivo es proporcionar un sistema fácil de usar que permita a los comerciantes y empresas tener un control más eficiente de sus operaciones diarias, optimizando el proceso administrativo y garantizando trazabilidad en todas las transacciones.
 
-## Project setup
+Este proyecto está pensado para ser modular y flexible, lo que permite a futuros usuarios adaptarlo a sus necesidades específicas, tanto para bares, restaurantes como para otros tipos de comercios.
 
-```bash
-$ npm install
-```
+---
 
-## Compile and run the project
+## Instalación
 
-```bash
-# development
-$ npm run start
+1. Clona el repositorio:
 
-# watch mode
-$ npm run start:dev
+   ```bash
+   git clone https://github.com/tu-usuario/business-manager.git
+   ```
 
-# production mode
-$ npm run start:prod
-```
+2. Instala las dependencias:
 
-## Run tests
+   ```bash
+   npm install
+   ```
 
-```bash
-# unit tests
-$ npm run test
+3. Configura la base de datos en el archivo `.env`.
 
-# e2e tests
-$ npm run test:e2e
+4. Inicia el servidor:
 
-# test coverage
-$ npm run test:cov
-```
+   ```bash
+   npm run start
+   ```
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## Features
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- Gestión de proveedores.
+- Control de ingresos y egresos.
+- Registro de facturas y remitos.
+- Balance financiero y trazabilidad de pagos.
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Este proyecto está bajo la Licencia MIT.
+
+---
+
+# Business Manager
+
+## Description
+
+**Business Manager** is a platform designed to help businesses manage their suppliers, track their income and expenses, and keep a detailed record of their transactions. With this tool, users can:
+
+- Register and manage suppliers.
+- Track business expenses and income.
+- Register invoices, delivery notes, and pending payments.
+- Get a detailed financial balance with information about debts to suppliers, payments made, and more.
+
+The goal is to provide an easy-to-use system that allows merchants and companies to have more efficient control over their daily operations, streamlining the administrative process and ensuring traceability across all transactions.
+
+This project is designed to be modular and flexible, allowing future users to adapt it to their specific needs, whether for bars, restaurants, or other types of businesses.
+
+---
+
+## Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/business-manager.git
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Set up the database in the `.env` file.
+
+4. Start the server:
+
+   ```bash
+   npm run start
+   ```
+
+---
+
+## Features
+
+- Supplier management.
+- Income and expense tracking.
+- Invoice and delivery note registration.
+- Financial balance and payment traceability.
+
+---
+
+## License
+
+This project is licensed under the MIT License.
