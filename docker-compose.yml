@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: business-manager-api_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: business-manager_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - business-manager-api_network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: business-manager-api_app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    networks:
+      - business-manager-api_network
+    depends_on:
+      - db
+    volumes:
+      - .:/business-manager  # Ahora coincide con el WORKDIR del Dockerfile
+    stdin_open: true  # Necesario para nodemon
+    tty: true         # Mantiene el contenedor corriendo en modo interactivo
+
+volumes:
+  pgdata:
+
+networks:
+  business-manager-api_network:
