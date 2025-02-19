@@ -1,11 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -13,9 +8,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  USER
-  ADMIN
+model Category {
+  id        Int        @id @default(autoincrement())
+  code      String     @unique
+  name      String
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  deletedAt DateTime?  @map("deleted_at")
+  Provider  Provider[]
+}
+
+model InvoiceType {
+  id        Int        @id @default(autoincrement())
+  name      String
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  deletedAt DateTime?  @map("deleted_at")
+  Provider  Provider[]
+}
+
+model Address {
+  id               Int        @id @default(autoincrement())
+  street           String
+  number           String
+  apartmentOrFloor String?    @map("apartment_or_floor")
+  city             String
+  state            String
+  zipCode          String     @map("zip_code")
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+  deletedAt        DateTime?  @map("deleted_at")
+  Provider         Provider[]
 }
 
 model User {
@@ -28,4 +51,30 @@ model User {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
+}
+
+model Provider {
+  id            Int          @id @default(autoincrement())
+  companyName   String       @map("company_name")
+  cuit          String?      @unique
+  responsable   String?
+  email         String?
+  phone         String?
+  addressId     Int?         @map("address_id")
+  alias         String?
+  cbu           String?
+  invoiceTypeId Int?         @map("invoice_type_id")
+  categoryId    Int          @map("category_id")
+  comment       String?
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+  deletedAt     DateTime?    @map("deleted_at")
+  address       Address?     @relation(fields: [addressId], references: [id])
+  category      Category     @relation(fields: [categoryId], references: [id])
+  invoiceType   InvoiceType? @relation(fields: [invoiceTypeId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
 }
