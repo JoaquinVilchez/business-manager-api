@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateInvoiceTypeDto } from './dto/create-invoice-type.dto';
 import { UpdateInvoiceTypeDto } from './dto/update-invoice-type.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class InvoiceTypeService {
