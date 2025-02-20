@@ -8,6 +8,8 @@ import { CategoryModule } from './category/category.module';
 import { InvoiceTypeModule } from './invoice-type/invoice-type.module';
 import { AddressModule } from './address/address.module';
 import { ProviderModule } from './provider/provider.module';
+import { ConfigModule } from '@nestjs/config';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
@@ -17,6 +19,10 @@ import { ProviderModule } from './provider/provider.module';
     InvoiceTypeModule,
     AddressModule,
     ProviderModule,
+    ConfigModule.forRoot({
+      load: [configuration],
+      isGlobal: true,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

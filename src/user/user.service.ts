@@ -2,13 +2,36 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import * as bcrypt from 'bcryptjs';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly configService: ConfigService, // Inyectamos el ConfigService
+  ) {}
+
+  private async hashPassword(password: string): Promise<string> {
+    const roundsOfHashing = this.configService.get<number>(
+      'roundsOfHashing',
+      10,
+    );
+
+    if (!Number.isInteger(roundsOfHashing) || roundsOfHashing <= 0) {
+      throw new Error('Invalid roundsOfHashing value in configuration');
+    }
+
+    return bcrypt.hash(password, roundsOfHashing);
+  }
 
   async create(data: CreateUserDto) {
-    return this.prisma.user.create({ data });
+    return this.prisma.user.create({
+      data: {
+        ...data,
+        password: await this.hashPassword(data.password),
+      },
+    });
   }
 
   async findAll() {
@@ -24,9 +47,15 @@ export class UserService {
   }
 
   async update(id: number, data: UpdateUserDto) {
+    const updateData = { ...data };
+
+    if (data.password) {
+      updateData.password = await this.hashPassword(data.password);
+    }
+
     return this.prisma.user.update({
       where: { id },
-      data,
+      data: updateData,
     });
   }
 
