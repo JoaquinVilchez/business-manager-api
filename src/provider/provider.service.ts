@@ -8,7 +8,7 @@ export class ProviderService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateProviderDto) {
-    return this.prisma.provider.create({
+    return await this.prisma.provider.create({
       data: {
         companyName: data.companyName,
         cuit: data.cuit,
