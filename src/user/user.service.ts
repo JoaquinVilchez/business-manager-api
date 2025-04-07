@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -9,7 +13,7 @@ import { ConfigService } from '@nestjs/config';
 export class UserService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly configService: ConfigService, // Inyectamos el ConfigService
+    private readonly configService: ConfigService,
   ) {}
 
   private async hashPassword(password: string): Promise<string> {
@@ -26,6 +30,15 @@ export class UserService {
   }
 
   async create(data: CreateUserDto) {
+    // Check if email already exists
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email: data.email },
+    });
+
+    if (existingUser) {
+      throw new ConflictException('Email is already in use');
+    }
+
     return this.prisma.user.create({
       data: {
         ...data,
@@ -34,19 +47,93 @@ export class UserService {
     });
   }
 
-  async findAll() {
-    return this.prisma.user.findMany();
+  async findAll(page = 1, limit = 10, search?: string) {
+    const skip = (page - 1) * limit;
+
+    const where = search
+      ? {
+          OR: [
+            { firstName: { contains: search } },
+            { lastName: { contains: search } },
+            { email: { contains: search } },
+          ],
+        }
+      : {};
+
+    const [users, total] = await Promise.all([
+      this.prisma.user.findMany({
+        skip,
+        take: limit,
+        where,
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+      this.prisma.user.count({ where }),
+    ]);
+
+    return {
+      data: users,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   async findOne(id: number) {
-    const user = await this.prisma.user.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
+
     return user;
   }
 
   async update(id: number, data: UpdateUserDto) {
+    // Check if user exists
+    const existingUser = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!existingUser) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    // If updating email, check if it's already in use
+    if (data.email && data.email !== existingUser.email) {
+      const emailExists = await this.prisma.user.findUnique({
+        where: { email: data.email },
+      });
+
+      if (emailExists) {
+        throw new ConflictException('Email is already in use');
+      }
+    }
+
     const updateData = { ...data };
 
     if (data.password) {
@@ -56,10 +143,37 @@ export class UserService {
     return this.prisma.user.update({
       where: { id },
       data: updateData,
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
   }
 
   async delete(id: number) {
-    return this.prisma.user.delete({ where: { id } });
+    // Check if user exists
+    const existingUser = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!existingUser) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    return this.prisma.user.delete({
+      where: { id },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        role: true,
+      },
+    });
   }
 }
