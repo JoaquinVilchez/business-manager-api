@@ -2,14 +2,14 @@
 FROM node:20-alpine
 
 # Definir directorio de trabajo
-WORKDIR /business-manager
+WORKDIR /business-manager-api
 
 # Copiar archivos de configuración y código fuente antes de instalar dependencias
 COPY package*.json ./
 COPY . .
 
 # Ajustar permisos para evitar problemas de acceso
-RUN chmod -R 777 /business-manager
+RUN chmod -R 777 /business-manager-api
 
 # Instalar dependencias evitando errores de compatibilidad
 RUN npm install --legacy-peer-deps

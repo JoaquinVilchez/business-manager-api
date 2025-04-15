@@ -8,7 +8,8 @@ import {
   Matches,
   MinLength,
   MaxLength,
-  IsPhoneNumber,
+  IsArray,
+  ArrayMinSize,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -69,7 +70,6 @@ export class UpdateProviderDto extends PartialType(CreateProviderDto) {
   })
   @ValidateIf((o: UpdateProviderDto) => o.phone !== undefined)
   @IsString()
-  @IsPhoneNumber()
   phone?: string;
 
   @ApiProperty({
@@ -125,6 +125,19 @@ export class UpdateProviderDto extends PartialType(CreateProviderDto) {
   @ValidateIf((o: UpdateProviderDto) => o.categoryId !== undefined)
   @IsNumber()
   categoryId?: number;
+
+  @ApiProperty({
+    description: 'Array of payment method IDs',
+    example: [1, 2, 3],
+    type: [Number],
+    minItems: 1,
+    required: false,
+  })
+  @ValidateIf((o: UpdateProviderDto) => o.paymentMethodIds !== undefined)
+  @IsArray()
+  @ArrayMinSize(1)
+  @IsNumber({}, { each: true })
+  paymentMethodIds?: number[];
 
   @ApiProperty({
     description: 'Additional comments',

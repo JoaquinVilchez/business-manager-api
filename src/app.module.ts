@@ -10,6 +10,7 @@ import { AddressModule } from './address/address.module';
 import { ProviderModule } from './provider/provider.module';
 import { ConfigModule } from '@nestjs/config';
 import { TransactionModule } from './transactions/transaction.module';
+import { PaymentMethodModule } from './payment-method/payment-method.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -25,6 +26,7 @@ import configuration from './config/configuration';
       load: [configuration],
       isGlobal: true,
     }),
+    PaymentMethodModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

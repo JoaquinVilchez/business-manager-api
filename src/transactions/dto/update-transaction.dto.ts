@@ -81,4 +81,14 @@ export class UpdateTransactionDto extends PartialType(CreateTransactionDto) {
   @IsOptional()
   @ValidateIf((o: UpdateTransactionDto) => o.userId !== undefined)
   userId?: number;
+
+  @ApiProperty({
+    description: 'ID del método de pago',
+    required: false,
+    minimum: 1,
+    type: Number,
+  })
+  @IsOptional()
+  @ValidateIf((o: UpdateTransactionDto) => o.paymentMethodId !== undefined)
+  paymentMethodId?: number;
 }

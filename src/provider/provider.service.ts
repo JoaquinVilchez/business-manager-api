@@ -9,6 +9,17 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class ProviderService {
+  private readonly providerInclude = {
+    address: true,
+    invoiceType: true,
+    category: true,
+    providerPaymentMethod: {
+      include: {
+        paymentMethod: true,
+      },
+    },
+  };
+
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateProviderDto) {
@@ -58,6 +69,18 @@ export class ProviderService {
       }
     }
 
+    // Check if payment methods exist
+    for (const paymentMethodId of data.paymentMethodIds) {
+      const paymentMethod = await this.prisma.paymentMethod.findUnique({
+        where: { id: paymentMethodId },
+      });
+      if (!paymentMethod) {
+        throw new NotFoundException(
+          `Payment method with ID ${paymentMethodId} not found`,
+        );
+      }
+    }
+
     return this.prisma.provider.create({
       data: {
         companyName: data.companyName,
@@ -75,41 +98,13 @@ export class ProviderService {
           ? { connect: { id: data.invoiceTypeId } }
           : undefined,
         category: { connect: { id: data.categoryId } },
+        providerPaymentMethod: {
+          create: data.paymentMethodIds.map((paymentMethodId) => ({
+            paymentMethod: { connect: { id: paymentMethodId } },
+          })),
+        },
       },
-      select: {
-        id: true,
-        companyName: true,
-        cuit: true,
-        responsable: true,
-        phone: true,
-        email: true,
-        cbu: true,
-        alias: true,
-        comment: true,
-        address: {
-          select: {
-            id: true,
-            street: true,
-            number: true,
-            city: true,
-            state: true,
-          },
-        },
-        invoiceType: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        category: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        createdAt: true,
-        updatedAt: true,
-      },
+      include: this.providerInclude,
     });
   }
 
@@ -132,36 +127,7 @@ export class ProviderService {
         skip,
         take: limit,
         where,
-        select: {
-          id: true,
-          companyName: true,
-          cuit: true,
-          responsable: true,
-          phone: true,
-          email: true,
-          address: {
-            select: {
-              id: true,
-              street: true,
-              city: true,
-              state: true,
-            },
-          },
-          invoiceType: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          category: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          createdAt: true,
-          updatedAt: true,
-        },
+        include: this.providerInclude,
         orderBy: {
           companyName: 'asc',
         },
@@ -183,41 +149,7 @@ export class ProviderService {
   async findOne(id: number) {
     const provider = await this.prisma.provider.findUnique({
       where: { id },
-      select: {
-        id: true,
-        companyName: true,
-        cuit: true,
-        responsable: true,
-        phone: true,
-        email: true,
-        cbu: true,
-        alias: true,
-        comment: true,
-        address: {
-          select: {
-            id: true,
-            street: true,
-            number: true,
-            city: true,
-            state: true,
-            zipCode: true,
-          },
-        },
-        invoiceType: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        category: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        createdAt: true,
-        updatedAt: true,
-      },
+      include: this.providerInclude,
     });
 
     if (!provider) {
@@ -288,6 +220,20 @@ export class ProviderService {
       }
     }
 
+    // Check if payment methods exist if being updated
+    if (data.paymentMethodIds !== undefined) {
+      for (const paymentMethodId of data.paymentMethodIds) {
+        const paymentMethod = await this.prisma.paymentMethod.findUnique({
+          where: { id: paymentMethodId },
+        });
+        if (!paymentMethod) {
+          throw new NotFoundException(
+            `Payment method with ID ${paymentMethodId} not found`,
+          );
+        }
+      }
+    }
+
     return this.prisma.provider.update({
       where: { id },
       data: {
@@ -314,41 +260,16 @@ export class ProviderService {
             ? { connect: { id: data.categoryId } }
             : undefined,
         }),
+        ...(data.paymentMethodIds !== undefined && {
+          ProviderPaymentMethod: {
+            deleteMany: {},
+            create: data.paymentMethodIds.map((paymentMethodId) => ({
+              paymentMethod: { connect: { id: paymentMethodId } },
+            })),
+          },
+        }),
       },
-      select: {
-        id: true,
-        companyName: true,
-        cuit: true,
-        responsable: true,
-        phone: true,
-        email: true,
-        cbu: true,
-        alias: true,
-        comment: true,
-        address: {
-          select: {
-            id: true,
-            street: true,
-            number: true,
-            city: true,
-            state: true,
-          },
-        },
-        invoiceType: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        category: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        createdAt: true,
-        updatedAt: true,
-      },
+      include: this.providerInclude,
     });
   }
 

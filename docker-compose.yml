@@ -30,7 +30,7 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/business-manager  # Ahora coincide con el WORKDIR del Dockerfile
+      - .:/business-manager-api
     stdin_open: true  # Necesario para nodemon
     tty: true         # Mantiene el contenedor corriendo en modo interactivo
 

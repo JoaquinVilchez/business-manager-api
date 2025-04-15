@@ -6,7 +6,8 @@ import {
   Matches,
   MinLength,
   MaxLength,
-  IsPhoneNumber,
+  IsArray,
+  ArrayMinSize,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -63,7 +64,6 @@ export class CreateProviderDto {
   })
   @IsOptional()
   @IsString()
-  @IsPhoneNumber()
   phone?: string;
 
   @ApiProperty({
@@ -118,6 +118,17 @@ export class CreateProviderDto {
   })
   @IsNumber()
   categoryId: number;
+
+  @ApiProperty({
+    description: 'Array of payment method IDs',
+    example: [1, 2, 3],
+    type: [Number],
+    minItems: 1,
+  })
+  @IsArray()
+  @ArrayMinSize(1)
+  @IsNumber({}, { each: true })
+  paymentMethodIds: number[];
 
   @ApiProperty({
     description: 'Additional comments',

@@ -143,4 +143,15 @@ export class CreateTransactionDto {
   @IsNumber()
   @IsPositive()
   userId: number;
+
+  @ApiProperty({
+    description: 'ID del método de pago utilizado',
+    required: true,
+    example: 1,
+    minimum: 1,
+    type: Number,
+  })
+  @IsNumber()
+  @IsPositive()
+  paymentMethodId: number;
 }

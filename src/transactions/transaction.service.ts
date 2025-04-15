@@ -30,6 +30,16 @@ export class TransactionService {
       throw new NotFoundException(`User with ID ${data.userId} not found`);
     }
 
+    // Validar que el usuario existe
+    const paymentMethod = await this.prisma.paymentMethod.findUnique({
+      where: { id: data.paymentMethodId },
+    });
+    if (!paymentMethod) {
+      throw new NotFoundException(
+        `Payment method with ID ${data.paymentMethodId} not found`,
+      );
+    }
+
     // Validar que el monto pagado no sea mayor al monto total
     if (data.paidAmount && data.amount && data.paidAmount > data.amount) {
       throw new BadRequestException(
@@ -50,6 +60,7 @@ export class TransactionService {
         comment: data.comment,
         provider: { connect: { id: data.providerId } },
         user: { connect: { id: data.userId } },
+        paymentMethod: { connect: { id: data.paymentMethodId } },
       },
     });
   }
@@ -138,7 +149,6 @@ export class TransactionService {
   }
 
   async update(id: number, data: UpdateTransactionDto) {
-    // Verificar si la transacción existe
     const existingTransaction = await this.prisma.transaction.findUnique({
       where: { id },
     });
@@ -147,7 +157,6 @@ export class TransactionService {
       throw new NotFoundException(`Transaction with ID ${id} not found`);
     }
 
-    // Verificar si el proveedor existe si se está actualizando
     if (data.providerId !== undefined) {
       const provider = await this.prisma.provider.findUnique({
         where: { id: data.providerId },
@@ -159,7 +168,6 @@ export class TransactionService {
       }
     }
 
-    // Verificar si el usuario existe si se está actualizando
     if (data.userId !== undefined) {
       const user = await this.prisma.user.findUnique({
         where: { id: data.userId },
@@ -192,7 +200,6 @@ export class TransactionService {
   }
 
   async remove(id: number) {
-    // Verificar si la transacción existe
     const existingTransaction = await this.prisma.transaction.findUnique({
       where: { id },
     });
