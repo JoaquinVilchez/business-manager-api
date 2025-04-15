@@ -9,6 +9,18 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class TransactionService {
+  private readonly providerInclude = {
+    id: true,
+    companyName: true,
+    cuit: true,
+  };
+  private readonly userInclude = {
+    id: true,
+    firstName: true,
+    lastName: true,
+    email: true,
+  };
+
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateTransactionDto) {
@@ -83,21 +95,8 @@ export class TransactionService {
         take: limit,
         where,
         include: {
-          provider: {
-            select: {
-              id: true,
-              companyName: true,
-              cuit: true,
-            },
-          },
-          user: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true,
-            },
-          },
+          provider: { select: this.providerInclude },
+          user: { select: this.userInclude },
         },
         orderBy: {
           date: 'desc',
@@ -121,23 +120,8 @@ export class TransactionService {
     const transaction = await this.prisma.transaction.findUnique({
       where: { id },
       include: {
-        provider: {
-          select: {
-            id: true,
-            companyName: true,
-            cuit: true,
-            phone: true,
-            email: true,
-          },
-        },
-        user: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-          },
-        },
+        provider: { select: this.providerInclude },
+        user: { select: this.userInclude },
       },
     });
 

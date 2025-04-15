@@ -15,17 +15,6 @@ export class AddressService {
   async create(data: CreateAddressDto) {
     return this.prisma.address.create({
       data,
-      select: {
-        id: true,
-        street: true,
-        number: true,
-        apartmentOrFloor: true,
-        city: true,
-        state: true,
-        zipCode: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
   }
 
@@ -49,17 +38,6 @@ export class AddressService {
     const [addresses, total] = await Promise.all([
       this.prisma.address.findMany({
         where,
-        select: {
-          id: true,
-          street: true,
-          number: true,
-          apartmentOrFloor: true,
-          city: true,
-          state: true,
-          zipCode: true,
-          createdAt: true,
-          updatedAt: true,
-        },
         orderBy: {
           street: 'asc',
         },
@@ -83,17 +61,6 @@ export class AddressService {
   async findOne(id: number) {
     const address = await this.prisma.address.findUnique({
       where: { id },
-      select: {
-        id: true,
-        street: true,
-        number: true,
-        apartmentOrFloor: true,
-        city: true,
-        state: true,
-        zipCode: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
 
     if (!address) {
@@ -116,17 +83,6 @@ export class AddressService {
     return this.prisma.address.update({
       where: { id },
       data,
-      select: {
-        id: true,
-        street: true,
-        number: true,
-        apartmentOrFloor: true,
-        city: true,
-        state: true,
-        zipCode: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
   }
 
@@ -153,13 +109,6 @@ export class AddressService {
 
     return this.prisma.address.delete({
       where: { id },
-      select: {
-        id: true,
-        street: true,
-        number: true,
-        city: true,
-        state: true,
-      },
     });
   }
 }

@@ -65,15 +65,6 @@ export class UserService {
         skip,
         take: limit,
         where,
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          email: true,
-          role: true,
-          createdAt: true,
-          updatedAt: true,
-        },
         orderBy: {
           createdAt: 'desc',
         },
@@ -95,15 +86,6 @@ export class UserService {
   async findOne(id: number) {
     const user = await this.prisma.user.findUnique({
       where: { id },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
 
     if (!user) {
@@ -143,15 +125,6 @@ export class UserService {
     return this.prisma.user.update({
       where: { id },
       data: updateData,
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
   }
 
@@ -167,13 +140,6 @@ export class UserService {
 
     return this.prisma.user.delete({
       where: { id },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        role: true,
-      },
     });
   }
 }

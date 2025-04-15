@@ -25,12 +25,6 @@ export class InvoiceTypeService {
 
     return this.prisma.invoiceType.create({
       data,
-      select: {
-        id: true,
-        name: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
   }
 
@@ -48,12 +42,6 @@ export class InvoiceTypeService {
         skip,
         take: limit,
         where,
-        select: {
-          id: true,
-          name: true,
-          createdAt: true,
-          updatedAt: true,
-        },
         orderBy: {
           name: 'asc',
         },
@@ -75,12 +63,6 @@ export class InvoiceTypeService {
   async findOne(id: number) {
     const invoiceType = await this.prisma.invoiceType.findUnique({
       where: { id },
-      select: {
-        id: true,
-        name: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
 
     if (!invoiceType) {
@@ -116,12 +98,6 @@ export class InvoiceTypeService {
     return this.prisma.invoiceType.update({
       where: { id },
       data,
-      select: {
-        id: true,
-        name: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
   }
 
@@ -148,10 +124,6 @@ export class InvoiceTypeService {
 
     return this.prisma.invoiceType.delete({
       where: { id },
-      select: {
-        id: true,
-        name: true,
-      },
     });
   }
 }

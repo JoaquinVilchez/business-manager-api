@@ -25,13 +25,6 @@ export class CategoryService {
 
     return this.prisma.category.create({
       data,
-      select: {
-        id: true,
-        code: true,
-        name: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
   }
 
@@ -49,13 +42,6 @@ export class CategoryService {
     const [categories, total] = await Promise.all([
       this.prisma.category.findMany({
         where,
-        select: {
-          id: true,
-          code: true,
-          name: true,
-          createdAt: true,
-          updatedAt: true,
-        },
         orderBy: {
           code: 'asc',
         },
@@ -79,13 +65,6 @@ export class CategoryService {
   async findOne(id: number) {
     const category = await this.prisma.category.findUnique({
       where: { id },
-      select: {
-        id: true,
-        code: true,
-        name: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
 
     if (!category) {
@@ -119,13 +98,6 @@ export class CategoryService {
     return this.prisma.category.update({
       where: { id },
       data,
-      select: {
-        id: true,
-        code: true,
-        name: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
   }
 
@@ -151,11 +123,6 @@ export class CategoryService {
 
     return this.prisma.category.delete({
       where: { id },
-      select: {
-        id: true,
-        code: true,
-        name: true,
-      },
     });
   }
 }

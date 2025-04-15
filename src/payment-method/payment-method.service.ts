@@ -40,10 +40,6 @@ export class PaymentMethodService {
     const [paymentMethods, total] = await Promise.all([
       this.prisma.paymentMethod.findMany({
         where,
-        select: {
-          id: true,
-          name: true,
-        },
         orderBy: {
           id: 'asc',
         },
@@ -67,10 +63,6 @@ export class PaymentMethodService {
   async findOne(id: number) {
     const paymentMethod = await this.prisma.paymentMethod.findUnique({
       where: { id },
-      select: {
-        id: true,
-        name: true,
-      },
     });
 
     if (!paymentMethod) {
@@ -104,10 +96,6 @@ export class PaymentMethodService {
     return this.prisma.paymentMethod.update({
       where: { id },
       data,
-      select: {
-        id: true,
-        name: true,
-      },
     });
   }
 
