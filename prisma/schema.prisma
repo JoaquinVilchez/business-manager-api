@@ -101,10 +101,10 @@ model Transaction {
   date            DateTime
   dueDate         DateTime?      @map("due_date")
   receiptNumber   String?
-  type            String         @default("expense")
+  type            String         @default("EXPENSE")
   amount          Float
   paidAmount      Float?         @map("paid_amount")
-  status          String         @default("pending")
+  status          String         @default("PENDING")
   matchesInvoice  Boolean        @map("matches_invoice")
   comment         String?
   providerId      Int            @map("provider_id")

@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsString,
@@ -58,6 +58,7 @@ export class CreateTransactionDto {
     example: TransactionType.INCOME,
     enum: Object.values(TransactionType),
   })
+  @Transform(({ value }: { value: string }) => value?.toUpperCase())
   @IsString()
   @IsEnum(TransactionType)
   type: TransactionType;
@@ -98,6 +99,7 @@ export class CreateTransactionDto {
     example: TransactionStatus.PENDING,
     enum: Object.values(TransactionStatus),
   })
+  @Transform(({ value }: { value: string }) => value?.toUpperCase())
   @IsString()
   @IsEnum(TransactionStatus)
   status: TransactionStatus;

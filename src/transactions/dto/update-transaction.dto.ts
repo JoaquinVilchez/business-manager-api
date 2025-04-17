@@ -1,7 +1,11 @@
 import { PartialType, ApiProperty } from '@nestjs/swagger';
 import { CreateTransactionDto } from './create-transaction.dto';
 import { IsOptional, ValidateIf, IsEnum } from 'class-validator';
-import { TransactionStatus } from 'src/enums/transaction-status.enum';
+import { Transform } from 'class-transformer';
+import {
+  TransactionStatus,
+  TransactionType,
+} from 'src/enums/transaction-status.enum';
 
 export class UpdateTransactionDto extends PartialType(CreateTransactionDto) {
   @ApiProperty({
@@ -33,6 +37,18 @@ export class UpdateTransactionDto extends PartialType(CreateTransactionDto) {
   paidAmount?: number;
 
   @ApiProperty({
+    description: 'Tipo de transacción',
+    required: false,
+    example: TransactionType.INCOME,
+    enum: Object.values(TransactionType),
+  })
+  @IsOptional()
+  @ValidateIf((o: UpdateTransactionDto) => o.type !== undefined)
+  @Transform(({ value }: { value: string }) => value?.toUpperCase())
+  @IsEnum(TransactionType)
+  type?: TransactionType;
+
+  @ApiProperty({
     description: 'Estado de la transacción',
     required: false,
     example: TransactionStatus.PENDING,
@@ -40,6 +56,7 @@ export class UpdateTransactionDto extends PartialType(CreateTransactionDto) {
   })
   @IsOptional()
   @ValidateIf((o: UpdateTransactionDto) => o.status !== undefined)
+  @Transform(({ value }: { value: string }) => value?.toUpperCase())
   @IsEnum(TransactionStatus)
   status?: TransactionStatus;
 
